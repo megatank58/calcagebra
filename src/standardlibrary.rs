@@ -5,7 +5,7 @@ use std::collections::HashMap;
 
 use crate::{
     data::{sizedset::SizedSet, Data},
-    interpreter::{Interpreter, Std},
+    interpreter::Std,
 };
 #[derive(Debug, Clone)]
 pub struct StandardLibrary {
@@ -159,7 +159,7 @@ impl StandardLibrary {
                         variables.insert(arg.to_string(), sets[i].clone());
                     }
 
-                    return Interpreter::eval_expression(&f.expr, &variables, &functions, &std.map);
+                    return f.run(&variables, &functions, &std.map);
                 }
                 unreachable!()
             });
@@ -174,13 +174,11 @@ impl StandardLibrary {
                 let mut shapes = vec![];
 
                 for z in x {
-                    if let Data::Function(f) = functions.get(&z.to_function()).unwrap()
-                    {
+                    if let Data::Function(f) = functions.get(&z.to_function()).unwrap() {
                         let shape = Shape::Continuous(Box::new(|y| {
                             let mut variables = variables.clone();
                             variables.insert(f.args.first().unwrap().to_string(), Data::Number(y));
-                            Interpreter::eval_expression(&f.expr, &variables, &functions, &std.map)
-                                .to_number()
+                            f.run(&variables, &functions, &std.map).to_number()
                         }));
                         shapes.push(shape);
                     }

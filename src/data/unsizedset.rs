@@ -88,6 +88,17 @@ impl UnsizedSet {
         }
     }
 
+    pub fn from_base_set(base_set: BaseSet) -> Self {
+        Self {
+            base_set,
+            conditions: vec![]
+        }
+    }
+
+    pub fn contains(&self) -> bool {
+        
+    }
+
     pub fn sorted_conditions(
         &self,
         variables: &Variables,

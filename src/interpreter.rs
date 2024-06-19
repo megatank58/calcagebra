@@ -187,7 +187,7 @@ impl Interpreter {
                         variables.insert(arg.to_string(), r);
                     }
 
-                    return Interpreter::eval_expression(&f.expr, &variables, functions, std);
+                    return f.run(&variables, functions, std);
                 }
                 unreachable!()
             }
